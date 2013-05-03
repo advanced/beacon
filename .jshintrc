@@ -1,0 +1,13 @@
+{
+    "curly": true,
+    "camelcase": true,
+    "eqnull": true,
+    "eqeqeq": true,
+    "latedef": true,
+    "undef": true,
+    "newcap": true,
+    "quotmark": "single",
+    "node": true,
+    "es5": true,    
+    "latedef":false
+}
