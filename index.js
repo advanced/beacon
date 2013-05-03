@@ -18,7 +18,6 @@ module.exports = Tower;
  * @param {Object} options
  * @api public
  */
-
 function Tower(options) {
 
     if (!(this instanceof Tower)) {
