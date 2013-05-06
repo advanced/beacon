@@ -27,3 +27,7 @@ tower.on('maxed', function(port) {
 tower.on('new', function(port) {
     console.log(port)
 })
+
+tower.on('network update', function(port) {
+    console.log(port)
+})

@@ -28,16 +28,26 @@ function Tower(options) {
     this.options = options || {};
     this.claimed = {};
     this.from = this.options.from || 4000;
-    this.to = this.options.to || 4006;
+    this.to = this.options.to || 5000;
     this.count = this.from;
     this.host = this.options.host || getHost();
     this.redis = redis.createClient();
-
+    this.pub = redis.createClient();
+    this.sub = redis.createClient();
+    this.initEvents();
 }
 
 inherits(Tower, EventEmitter);
 
+Tower.prototype.initEvents = function() {
+    var self = this;
 
+    this.sub.subscribe('update');
+    
+    this.sub.on('message', function(channel, message) {
+        self.emit('network update', message);
+    });
+};
 
 Tower.prototype.scan = function(port, cb) {
     var self = this;
@@ -68,26 +78,25 @@ Tower.prototype.scan = function(port, cb) {
 
 Tower.prototype.register = function(service, cb) {
     var self = this;
-    
-    if (self.count <= self.to){
-    self.scan(self.count, function(err, port) {
-        if (err) {
-            cb(err, null);
-        } else {
-           
-            self.redis.sadd('__tower__' + service, self.host + ':' + port, function(err, result) {
-                self.emit('new', self.host);
-                cb(null, service + '@' + self.host + ':' + port);
-            });
-        }
-    });
-    }else{
-        cb('maxed',null);
+
+    if (self.count <= self.to) {
+        self.scan(self.count, function(err, port) {
+            if (err) {
+                cb(err, null);
+            } else {
+                self.redis.sadd('__tower__' + service, self.host + ':' + port, function(err, result) {
+                    self.emit('new', self.host);
+                    self.pub.publish('update', JSON.stringify({
+                        a: service
+                    }));
+                    cb(null, service + '@' + self.host + ':' + port);
+                });
+            }
+        });
+    } else {
+        cb('maxed', null);
     }
     self.count++;
-
-
-
 
 };
 
@@ -97,7 +106,6 @@ Tower.prototype.registred = function(service, cb) {
         cb(err, services);
     });
 };
-
 
 
 var getHost = function getHost(cb) {
