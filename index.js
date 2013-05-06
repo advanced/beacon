@@ -18,21 +18,19 @@ module.exports = Tower;
  * @param {Object} options
  * @api public
  */
+
 function Tower(options) {
 
     if (!(this instanceof Tower)) {
-        return new Tower();
+        return new Tower(options);
     }
 
     this.options = options || {};
     this.claimed = {};
-    this.from = this.options.from || 5000;
-    this.to = this.options.to || 6000;
+    this.from = this.options.from || 4000;
+    this.to = this.options.to || 4006;
     this.count = this.from;
-    this.host = this.options.host || '127.0.0.1';
-    this.socket = new net.Socket();
-    this.socket.setTimeout(1000);
-    this.host = getHost();
+    this.host = this.options.host || getHost();
     this.redis = redis.createClient();
 
 }
@@ -43,40 +41,59 @@ inherits(Tower, EventEmitter);
 
 Tower.prototype.scan = function(port, cb) {
     var self = this;
+    var server = new net.Server();
 
-    this.socket.connect(port, this.host, function() {
-        self.socket.end();
+    server.listen(port, this.host, function() {
+
+        server.on('close', function(err) {
+            cb(null, port);
+        });
+
+        server.close();
+
     });
 
-    this.socket.on('error', function(err) {
-        // console.log(err)
-        cb(null, self.count);
+    server.on('error', function(err) {
+        console.log(err);
+        if (port <= self.to) {
+            self.scan(port, cb);
+        } else {
+            self.emit('maxed', port);
+            cb('out of bound', null);
+        }
+
     });
 
-    this.socket.on('connect', function() {
-        self.scan(self.count++, cb);
-    });
-
-    this.socket.on('end', function(err) {
-        console.log('end');
-    });
 };
 
 Tower.prototype.register = function(service, cb) {
     var self = this;
-
-    this.scan(this.count, function(err, port) {
-        self.redis.sadd('__tower__' + service, self.host + ':' + port, function(err, result) {
-            self.emit('new',self.host);
-            cb(null, service + '@' + self.host + ':' + port);
-            self.count++;
-        });
+    
+    if (self.count <= self.to){
+    self.scan(self.count, function(err, port) {
+        if (err) {
+            cb(err, null);
+        } else {
+           
+            self.redis.sadd('__tower__' + service, self.host + ':' + port, function(err, result) {
+                self.emit('new', self.host);
+                cb(null, service + '@' + self.host + ':' + port);
+            });
+        }
     });
+    }else{
+        cb('maxed',null);
+    }
+    self.count++;
+
+
+
+
 };
 
 Tower.prototype.registred = function(service, cb) {
     var self = this;
-    self.redis.smembers('__tower__' + service, function(err, services) {
+    this.redis.smembers('__tower__' + service, function(err, services) {
         cb(err, services);
     });
 };
@@ -90,7 +107,7 @@ var getHost = function getHost(cb) {
     Object.keys(interfaces).forEach(function(dev) {
 
         interfaces[dev].forEach(function(details) {
-            if (details.family === 'IPv4' && details.internal === false) {
+            if (details.family === 'IPv4' && !details.internal) {
                 host = details.address;
             }
         });
