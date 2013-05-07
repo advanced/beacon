@@ -9,5 +9,7 @@
     "quotmark": "single",
     "node": true,
     "es5": true,    
-    "latedef":false
+    "latedef":false,
+    "globals": { "describe": false,"it":false }
+
 }

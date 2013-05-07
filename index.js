@@ -45,7 +45,14 @@ Tower.prototype.initEvents = function() {
     this.sub.subscribe('update');
     
     this.sub.on('message', function(channel, message) {
-        self.emit('network update', message);
+        switch(channel){
+            case 'update':
+                    self.emit('service:new', message);
+        }
+    });
+
+    this.on('dropped',function(){
+        console.log('delete associated service');
     });
 };
 
@@ -69,7 +76,7 @@ Tower.prototype.scan = function(port, cb) {
             self.scan(port, cb);
         } else {
             self.emit('maxed', port);
-            cb('out of bound', null);
+            cb(new Error('out of bound'), null);
         }
 
     });
@@ -94,7 +101,7 @@ Tower.prototype.register = function(service, cb) {
             }
         });
     } else {
-        cb('maxed', null);
+        cb(new Error('maxed'), null);
     }
     self.count++;
 

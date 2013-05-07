@@ -1,22 +1,25 @@
 {
-    "name": "tower",
-    "version": "0.4.0",
-    "description": "ERROR: No README.md file found!",
-    "main": "index.js",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "repository": "",
-    "author": "",
-    "license": "BSD",
-    "dependencies": {
-        "redis": "~0.8.3",
-        "inherits": "~1.0.0"
-    },
-    "devDependencies": {
-        "grunt": "~0.4.1",
-        "grunt-contrib-jshint": "~0.4.3",
-        "grunt-contrib-watch": "~0.3.1",
-        "grunt-notify": "~0.2.3"
-    }
+  "name": "tower",
+  "version": "0.4.0",
+  "description": "README.md",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": "",
+  "author": "",
+  "license": "BSD",
+  "dependencies": {
+    "redis": "~0.8.3",
+    "inherits": "~1.0.0"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-jshint": "~0.4.3",
+    "grunt-contrib-watch": "~0.3.1",
+    "grunt-notify": "~0.2.3",
+    "chai": "~1.6.0",
+    "mocha": "~1.9.0",
+    "grunt-exec": "~0.4.0"
+  }
 }
