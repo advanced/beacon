@@ -1,4 +1,3 @@
-var adminPid = '/tmp/pids/admin.pid'
 module.exports = function(grunt) {
 
     grunt.initConfig({
@@ -11,7 +10,7 @@ module.exports = function(grunt) {
         },
 
         watch: {
-            files: ['index.js', 'test/*.js'],
+            files: ['index.js', 'test/*.js', 'lib/*.js'],
             tasks: ['jshint', 'exec']
         },
         
