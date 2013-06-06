@@ -1,41 +1,41 @@
-var Tower = require('../'),
+var Beacon = require('../'),
     expect = require('chai').expect;
 
-describe('tower', function() {
+describe('beacon', function() {
 
     describe('events', function() {
         
         it('should fire a new event', function(done) {
-            var tower = new Tower();
+            var beacon = new Beacon();
 
-            tower.on('new', function(port) {
+            beacon.on('new', function(port) {
                 expect(port).to.be.a('string');
             });
-            tower.register('new', done);
+            beacon.register('new', done);
         });
 
         it('should fire a network event', function(done) {
-            var tower = new Tower();
+            var beacon = new Beacon();
 
-            tower.on('service:new', function(port) {
+            beacon.on('service:new', function(port) {
                 expect(port).to.be.a('string');
             });
-            tower.register('new', done);
+            beacon.register('new', done);
         });
         
         it('should fire a maxed event', function(done) {
-            var tower = new Tower({
+            var beacon = new Beacon({
                 from: 4000,
                 to: 4000
             });
             var fn = function(err, port) {};
-            tower.on('maxed', function(port) {
+            beacon.on('maxed', function(port) {
                 expect(port).to.be.a('number');
                 done();
             });
-            tower.register('event', function(err, port) {
+            beacon.register('event', function(err, port) {
                 expect(err).to.not.equal('maxed');
-                tower.register('event2', function(err, port) {
+                beacon.register('event2', function(err, port) {
                     expect(port).to.be.a('null');
                     expect(err).to.not.be.a('null');
                     expect(err).to.have.ownProperty('message');

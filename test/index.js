@@ -1,12 +1,12 @@
-var Tower = require('../'),
+var Beacon = require('../'),
     expect = require('chai').expect;
 var claimed = [];
-describe('tower', function() {
+describe('beacon', function() {
 
     describe('#register', function() {
         it('should get a port in the specified range', function(done) {
-            var tower = new Tower();
-            tower.register('api', function(err, port) {
+            var beacon = new Beacon();
+            beacon.register('api', function(err, port) {
                 if (err) {
                     return done(err);
                 }
@@ -17,8 +17,8 @@ describe('tower', function() {
         });
 
         it('should augment the array for api', function(done) {
-            var tower = new Tower();
-            tower.register('api', function(err, port) {
+            var beacon = new Beacon();
+            beacon.register('api', function(err, port) {
                 if (err) {
                     return done(err);
                 }
@@ -29,8 +29,8 @@ describe('tower', function() {
         });
 
         it('should get the combosfor api', function(done) {
-            var tower = new Tower();
-            tower.query('api', function(err, port) {
+            var beacon = new Beacon();
+            beacon.query('api', function(err, port) {
                 if (err) {
                     return done(err);
                 }
@@ -40,10 +40,10 @@ describe('tower', function() {
         });
 
         it('should relase the ports', function(done) {
-            var tower = new Tower();
+            var beacon = new Beacon();
             var l = 0;
             claimed.forEach(function(p) {
-                tower.release(p, function(err, response) {
+                beacon.release(p, function(err, response) {
                     console.log(response);
                     console.log(claimed.length, l);
                     if (claimed.length === ++l) {

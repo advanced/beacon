@@ -1,24 +1,39 @@
 {
-  "name": "tower",
+  "name": "beacon",
   "version": "0.4.3",
-  "description": "README.md",
+  "description": "assign ports for you net services.",
   "main": "index.js",
-  "scripts": {
-    "test": "mocha --reporter spec"
+  "directories": {
+    "test": "test"
   },
-  "repository": "",
-  "author": "",
-  "license": "BSD",
   "dependencies": {
-    "redis": "~0.8.3"  
+    "redis": "~0.8.3"
   },
   "devDependencies": {
+    "mocha": "~1.9.0",
+    "chai": "~1.6.0",
     "grunt": "~0.4.1",
     "grunt-contrib-jshint": "~0.4.3",
     "grunt-contrib-watch": "~0.3.1",
-    "grunt-notify": "~0.2.3",
-    "chai": "~1.6.0",
-    "mocha": "~1.9.0",
-    "grunt-exec": "~0.4.0"
-  }
+    "grunt-exec": "~0.4.1",
+    "grunt-notify": "~0.2.4",
+
+  },
+  "scripts": {
+    "test": "mocha --reporter spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://advanced@github.com/advanced/beacon.git"
+  },
+  "keywords": [
+    "beacon",
+    "service",
+    "registry",
+    "axon",
+    "zmq",
+    "ports"
+  ],
+  "author": "Hikari",
+  "license": "BSD"
 }
