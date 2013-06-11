@@ -1,6 +1,6 @@
 {
   "name": "beacon",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "description": "assign ports for you net services.",
   "main": "index.js",
   "directories": {
